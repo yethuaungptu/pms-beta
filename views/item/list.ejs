@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <!--Button for sidebar toggle-->
+          <button class="btn" type="button" data-bs-theme="dark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <% include ../partial/account %>
+        </nav>
+        <main class="content px-3 py-2">
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1>View Items</h1>
+
+              <div class="container mt-3">
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered table-info"
+                    style="border: 1px solid black"
+                  >
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>ID</th>
+                        <th>Class</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Expired date</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i = 0; i < items.length;i++){%>
+                      <tr>
+                        <td><%= items[i].name %></td>
+                        <td><%= items[i].id %></td>
+                        <td><%= items[i].classId.name %></td>
+                        <td><%= items[i].categoryId.category %></td>
+                        <td><%= items[i].quantity %></td>
+                        <td><%= items[i].price %> MMK</td>
+                        <td><%= items[i].expDate.toLocaleDateString() %></td>
+                        <td>
+                          <button
+                            type="button"
+                            onclick="delFun('<%= items[i]._id %>')"
+                            class="btn btn-danger btn-sm"
+                          >
+                            Delete
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-warning btn-sm"
+                            onclick="modFun('<%= items[i]._id %>',$(this).parents()[1])"
+                          >
+                            Update
+                          </button>
+                        </td>
+                      </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Update Item</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form action="/item/update" method="post">
+              <input type="hidden" name="itemId" id="itemId" />
+              <div class="card bg-info">
+                <div class="mb-3 mt-3" style="margin: 10px">
+                  <label for="name">Name</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name"
+                    placeholder=""
+                    name="name"
+                  />
+                </div>
+
+                <div class="mb-3" style="margin: 10px">
+                  <label for="id">ID</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="id"
+                    placeholder=""
+                    name="id"
+                    readonly
+                  />
+                </div>
+                <div class="mb-3" style="margin: 10px">
+                  <label for="quantity">Quantity</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="quantity"
+                    placeholder=""
+                    min="0"
+                    name="quantity"
+                  />
+                </div>
+
+                <div class="mb-3" style="margin: 10px">
+                  <label for="price">Price</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    id="price"
+                    min="0"
+                    placeholder=""
+                    name="price"
+                  />
+                </div>
+                <div class="mb-3" style="margin: 10px">
+                  <label for="expdate">Expired date</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    id="expdate"
+                    placeholder=""
+                    name="expdate"
+                  />
+                </div>
+                <!-- <div>
+                  <div
+                    class="form-check form-switch m-3 form-check-inline"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="mySwitch"
+                      name="darkmode"
+                      value="yes"
+                      onclick="checkFun($(this))"
+                    />
+                    <label class="form-check-label" for="mySwitch"
+                      >Unit</label
+                    >
+                  </div>
+                  <button
+                    class="btn btn-primary d-none"
+                    id="unit-add-box"
+                    type="button"
+                    onclick="addBox()"
+                  >
+                    +
+                  </button>
+                </div> -->
+                <div id="unit-box"></div>
+
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  style="margin: 10px"
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Modal footer -->
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <% include ../partial/script %>
+  <script>
+    function modFun(id, trD) {
+      console.log(trD.children[5].innerHTML);
+      var myModal = new bootstrap.Modal(document.getElementById("myModal"), {});
+      myModal.show();
+      $("#itemId").val(id);
+      $("#name").val(trD.children[0].innerHTML);
+      $("#id").val(trD.children[1].innerHTML);
+      $("#quantity").val(trD.children[4].innerHTML);
+      $("#price").val(trD.children[5].innerHTML.split(" ")[0]);
+      const dateArr = trD.children[6].innerHTML.split("/");
+      const ds =
+        trD.children[6].innerHTML.split("/")[2] +
+        "-" +
+        (dateArr[0] < 10 ? "0" + dateArr[0] : dateArr[0]) +
+        "-" +
+        (dateArr[1] < 10 ? "0" + dateArr[1] : dateArr[1]);
+      $("#expdate").val(ds);
+    }
+    function delFun(id) {
+      var opt = confirm("Are you sure for delete");
+      if (opt) location.href = "/item/delete/" + id;
+    }
+  </script>
+</html>

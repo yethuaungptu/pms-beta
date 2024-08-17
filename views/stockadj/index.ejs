@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+       <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+
+        <!--Button for sidebar toggle-->
+        <button class="btn" type="button" data-bs-theme="dark">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        </nav>
+        <main class="content px-3 py-2">
+
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1>Stock Adjustment</h1>
+
+
+              <div class="container-fluid mt-3" >
+                <div class="container mt-3 mb-3"  >
+                    <form action="#" >
+                      <div class="card bg-info" style="text-align: center; width: 450px; margin: auto; padding: 50px;">
+                        <label for="StockName" >Stock Name: </label>
+                            <select class="form-select" id="stk" name="StockName">
+                                <option>Super Coffee</option>
+                                <option>MAMA Noodle</option>
+                                <option>Linc Ball-point Pen</option>
+                                <option>Decolgen</option>
+                              </select>
+                           </form>
+                           <div class="mb-3 mt-3" style="text-align: center; padding-top: 4px; padding-top: 8px;">
+                           <a href="stockadjcheck.html"> <button type="button"  class="btn btn-primary"  >Check</button></a>
+                         </div>
+                         </div>
+                        </div>
+                    </div>
+
+            </div>
+          </div>
+        </main>
+       </div>
+
+
+
+
+
+    </div>
+    
+          
+       
+  </body>
+
+  <% include ../partial/script %>
+</html>

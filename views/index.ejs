@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      
+      <!-- Sidebar -->
+       <% include ./partial/sidebar %>
+       <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+
+        <!--Button for sidebar toggle-->
+        <button class="btn" type="button" data-bs-theme="dark">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <% include ./partial/account %>
+        </nav>
+        <main class="content px-3 py-2">
+
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1 >PMS Stock Management System</h1>
+
+
+              <div class="container-fluid mt-3">
+                <div class="row">
+                    <div class="col-lg-4 mt-2">
+                        <div class="card " style="background-color: slateblue;">
+                            <div class="card-body">
+                                <h4 class="card-name">Total Stocks</h4>
+                                <div class="icon">
+                                <ion-icon name="cart"></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-2">
+                        <div class="card " style="background-color: mediumseagreen;">
+                            <div class="card-body">
+                                <h4 class="card-name">Total Categorys</h4>
+                                <div class="icon">
+                                <ion-icon name="keypad"></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-2">
+                        <div class="card " style="background-color: orange;">
+                            <div class="card-body">
+                                <h4 class="card-name">Total Class</h4>
+                                <div class="icon">
+                                <ion-icon name="menu" ></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 mt-2">
+                        <div class="card " style="background-color: cornflowerblue;">
+                            <div class="card-body">
+                                <h4 class="card-name">Total Suppliers</h4>
+                                <div class="icon">
+                                <ion-icon name="people"></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-2">
+                        <div class="card " style="background-color: rgb(222, 72, 152);">
+                            <div class="card-body">
+                                <h4 class="card-name">Total Sale Amount</h4>
+                                <div class="icon">
+                                <ion-icon name="trending-up"></ion-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-2">
+                        <div class="card" style="background-color: salmon;">
+                            <div class="card-body">
+                                <h4 class="card-name">Total Staff</h4>
+                                <div class="icon">
+                                <ion-icon name="people"></ion-icon>
+                                </div>
+                            </div>
+
+
+                          </div>
+                        </div>
+                    </div>
+                        <table class="table  table-bordered border-black table-responsive table-info " style="margin-top: 25px; border: 3px; text-align: center;">
+                             <thead>
+                                <th colspan="4" class="table-danger border-black">Top <i> 10</i> Best Seller Items</th>
+                                    <tr>
+                                       <th scope="col">NO</th>
+                                       <th scope="col">ID</th>
+                                       <th scope="col">Class</th>
+                                       <th scope="col">Catagory</th>
+                                    </tr>
+                             </thead> 
+                                    <tr>
+                                       <th scope="row">1</th>
+                                       <th>F-001</th>
+                                       <td>Food</td>
+                                       <td>MAMA Noodle</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">2</th>
+                                       <th>F-002</th>
+                                       <td>Food</td>
+                                       <td>Good Morning Bread</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">3</th>
+                                       <th>S-001</th>
+                                       <td>Stationery</td>
+                                       <td>Linc Ball Point Pen</td>
+                                    </tr>
+                                    <tr>
+                                       <th scope="row">4</th>
+                                       <th>S-002</th>
+                                       <td>Stationery</td>
+                                       <td>U Brand Exercise Book </td>
+                                    </tr>
+                  
+                            <tr>
+                              <th scope="row">5</th>
+                              <th>D-001</th>
+                              <td>Drinks</td>
+                              <td>Fire Dragon</td>
+                            </tr>
+                  
+                            <tr>
+                              <th scope="row">6</th>
+                              <th>D-002</th>
+                              <td>Drinks</td>
+                              <td>Dutch Mill Yogurt</td>
+                            </tr>
+                  
+                            <tr>
+                              <th scope="row">7</th>
+                              <th>Cos-001</th>
+                              <td>Cosmetics</td>
+                              <td>Bella Foundation</td>
+                            </tr>
+                  
+                            <tr>
+                              <th scope="row">8</th>
+                              <th>Cos-002</th>
+                              <td>Cosmetics</td>
+                              <td>Hearty Heart Juicy Lipstick</td>
+                            </tr>
+                  
+                            <tr>
+                              <th scope="row">9</th>
+                              <th>C-001</th>
+                              <td>Chemist</td>
+                              <td>Decolgen</td>
+                            </tr>
+                  
+                            <tr>
+                              <th scope="row">10</th>
+                              <th>C-002</th>
+                              <td>Chemist</td>
+                              <td>Paracap</td>
+                            </tr>
+                            </table>
+                    </div>
+            </div>
+        
+
+            </div>
+          </div>
+        </main>
+       </div>
+    </div>      
+  </body>
+
+  <% include ./partial/script %>
+<script type="module" src="/javascripts/ionicons.esm.js"></script>
+<script nomodule src="/javascripts/ionicons.js"></script>
+</html>

@@ -1,0 +1,8 @@
+<img
+  src="<%= locals.account.role == 'admin' ? '/images/admin.jpg':'/images/staff.jpg' %>"
+  class="admin-pic"
+  style="width: 45px; border-radius: 50%; cursor: pointer; margin-left: auto"
+/>
+<p style="font-weight: 300px; color: white; margin-top: 10px; margin-left: 5px">
+  <%= locals.account.name %> (<%= locals.account.role %>)
+</p>

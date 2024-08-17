@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <!--Button for sidebar toggle-->
+          <button class="btn" type="button" data-bs-theme="dark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <% include ../partial/account %>
+        </nav>
+        <main class="content px-3 py-2">
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1>Staff Setup</h1>
+              <div class="container-fluid mt-3 ">
+                <div class="row">
+                  <div class="col-lg-4 bg-info" style="border: 2px solid black; width:300px; height: 500px; padding: 10px;">
+                    <div class="container mt-3">
+                        <form action="/contact/staffsetup" method="post" id="frm">
+                          <div class="mb-3 mt-3">
+                            <label for="Sname">Staff Name</label>
+                            <input type="text" class="form-control" id="Sname" placeholder="Enter name" name="name">
+                          </div>
+                          <div class="mb-3">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                          </div>
+                          <div class="mb-3">
+                            <label for="ph">Phone</label>
+                            <input type="tel" class="form-control" id="ph" placeholder="Enter phone number" name="phone">
+                          </div>
+                          <div class="mb-3">
+                            <label for="posi">Position</label>
+                            <select class="form-select" name="position" id="posi">
+                              <option value="Manager">Manager</option>
+                              <option value="Cashier">Cashier</option>
+                            </select>
+                          </div>
+                          <div class="mb-3">
+                            <label for="ptw">Password</label>
+                            <input type="password" class="form-control" id="ptw" placeholder="password" name="password">
+                          </div>
+                         
+                          <button type="button" id="btnAdd" class="btn btn-primary">Add</button><br/>
+                        </form>
+                      </div>
+        
+        
+                </div>
+                  <div class="col-lg-8">
+                    <div class="table-responsive " >
+                        <table class="table table-bordered table-info ">
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Staff Name</th>
+                              <th>Email</th>
+                              <th>Phone</th>
+                              <th>Position</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% for(var i = 0; i < accounts.length; i++){%>
+                            <tr>
+                              <td><%= i+1 %></td>
+                              <td><%= accounts[i].name %></td>
+                              <td><%= accounts[i].email %></td>
+                              <td><%= accounts[i].phone %></td>
+                              <td><%= accounts[i].position %></td>
+                              <td><button type="button" class="btnUpdate btn btn-warning" onclick="modAccount('<%= accounts[i]._id %>',$(this).parents()[1].children)" >Modify</button>
+                              <button type="button" class="btndel btn btn-danger" onclick="btnDel('<%= accounts[i]._id %>')">Delete</button>
+                              </td>
+                            </tr>
+                          <%}%>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                </div>
+               </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal" id="updateModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+          
+                <!-- Modal Header -->
+                <div class="modal-header">
+                  <h4 class="modal-title">Update Staff</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+          
+                <!-- Modal body -->
+                <div class="modal-body">
+                  <div class="container mt-3">
+                    <form action="/contact/staffupdate" method="post">
+                      <input type="hidden" name="id" id="uid">
+                      <div class="mb-3 mt-3">
+                        <label for="uname">Staff Name</label>
+                        <input type="text" class="form-control" id="uname" placeholder="Enter name" name="uname">
+                      </div>
+                      <div class="mb-3">
+                        <label for="uemail">Email</label>
+                        <input type="email" class="form-control" id="uemail" placeholder="Enter email" name="uemail" readonly>
+                      </div>
+                      <div class="mb-3">
+                        <label for="uph">Phone</label>
+                        <input type="tel" class="form-control" id="uph" placeholder="Enter phone number" name="uphone">
+                      </div>
+                      <div class="mb-3">
+                        <label for="uposition">Position</label>
+                        <select class="form-select" name="uposition" id="uposition">
+                          <option value="Manager">Manager</option>
+                          <option value="Cashier">Cashier</option>
+                        </select>
+                      </div>
+                      <div class="mb-3">
+                        <label for="uptw">Password</label>
+                        <input type="password" class="form-control" id="uptw" placeholder="password" name="upassword">
+                      </div>
+                     
+                      <button type="submit" class="btn btn-primary">Update</button><br/>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+  <% include ../partial/script %>
+  <script>
+    function btnDel(id){
+      var opt = confirm("Are you sure for delete");
+      if(opt){
+        location.href = "/contact/deletestaff/"+id;
+      }
+    }
+    $("#btnAdd").click(function(){
+      const email = $("#email").val();
+      const name = $("#Sname").val();
+      const phone = $("#ph").val();
+      const position = $("#posi").val();
+      const password = $("#ptw").val();
+      if(email != "" && name != "" && phone != "" && position != "" && password !=""){
+        const data = {email:email};
+        $.ajax("/contact/staffdup",{
+          type:"POST",
+          data:data,
+          success:function(result){
+            if(result.status){
+              alert("Duplicate email");
+              $("#email").val("");
+              $("#email").focus()
+            }else{
+              $("#frm").submit();
+            }
+          }
+        })
+      }else{
+        alert("Please fill all fields")
+      }
+    })
+    function modAccount(id,tr){
+      var myModal = new bootstrap.Modal(document.getElementById("updateModal"), {});
+        myModal.show();
+        $("#uid").val(id);
+        $("#uname").val(tr[1].innerHTML);
+        $("#uemail").val(tr[2].innerHTML)
+        $("#uph").val(tr[3].innerHTML);
+        $("#uposition").val(tr[4].innerHTML);
+    }
+  </script>
+</html>

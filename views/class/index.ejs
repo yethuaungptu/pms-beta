@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <!--Button for sidebar toggle-->
+          <button class="btn" type="button" data-bs-theme="dark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <% include ../partial/account %>
+        </nav>
+        <main class="content px-3 py-2">
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1>Class</h1>
+              <div class="container-fluid mb-3 mt-3">
+                <div class="container mt-3">
+                  <form action="/classes/add" method="post" id="frm">
+                    <div
+                      class="card bg-info"
+                      style="
+                        text-align: center;
+                        width: 450px;
+                        margin: auto;
+                        padding: 50px;
+                      "
+                    >
+                      <div class="mb-3 mt-3 border-black">
+                        <label for="className"><b>Class Name:</b></label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Food"
+                          name="className"
+                          style="width: 250px; margin-left: 50px"
+                          id="name"
+                        />
+                      </div>
+
+                      <div
+                        class="border-black 4px"
+                        style="text-align: center; padding-top: 30px"
+                      >
+                        <button
+                          type="button"
+                          onclick="checkDup()"
+                          class="btn bg-primary"
+                        >
+                          Submit
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+
+              <div class="container mt-3 table-responsive">
+                <div
+                  class="container mt-3 mb-3"
+                  style="
+                    margin-top: 25px;
+                    border: 3px;
+                    text-align: center;
+                    margin: auto;
+                  "
+                >
+                  <table
+                    class="table table-bordered border-black table-responsive table-info"
+                  >
+                    <thead>
+                      <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Class Name</th>
+                        <th scope="col">Created by</th>
+                        <th scope="col">Updated by</th>
+                        <th scope="col">Created</th>
+                        <th scope="col">Updated</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i = 0; i < classes.length; i++){%>
+                      <tr>
+                        <th scope="row"><%= i+1 %></th>
+                        <td><%= classes[i].name %></td>
+                        <td><%= classes[i].createdBy.name %></td>
+                        <td><%= classes[i].updatedBy.name %></td>
+                        <td><%= classes[i].created.toLocaleDateString() %></td>
+                        <td><%= classes[i].updated.toLocaleDateString() %></td>
+                        <td>
+                          <button
+                            type="submit"
+                            class="btn btn-warning"
+                            onclick="modifyClass('<%= classes[i]._id %>','<%= classes[i].name %>')"
+                          >
+                            Modify
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-danger"
+                            onclick="funDel('<%= classes[i]._id %>')"
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <div class="modal" id="myModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Modal Header -->
+          <div class="modal-header">
+            <h4 class="modal-title">Update Class</h4>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+            ></button>
+          </div>
+
+          <!-- Modal body -->
+          <div class="modal-body">
+            <form action="/classes/update" method="post">
+              <div
+                style="
+                  text-align: center;
+                  width: 450px;
+                  margin: auto;
+                  padding: 50px;
+                "
+              >
+                <input type="hidden" name="id" id="id" />
+                <div class="mb-3 mt-3 border-black">
+                  <label for="uname"><b>Class Name:</b></label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Food"
+                    name="className"
+                    style="width: 250px; margin-left: 50px"
+                    id="uname"
+                  />
+                </div>
+
+                <div
+                  class="border-black 4px"
+                  style="text-align: center; padding-top: 30px"
+                >
+                  <button type="submit" class="btn bg-primary">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <!-- Modal footer -->
+        </div>
+      </div>
+    </div>
+  </body>
+  <% include ../partial/script %>
+  <script>
+    function funDel(id) {
+      var opt = confirm("Are you sure for delete");
+      if (opt) location.href = "/classes/delete/" + id;
+    }
+    function modifyClass(id, name) {
+      var myModal = new bootstrap.Modal(document.getElementById("myModal"), {});
+      myModal.show();
+      $("#id").val(id);
+      $("#uname").val(name);
+      console.log(id, name);
+    }
+    function checkDup() {
+      const name = $("#name").val();
+      if (name != "") {
+        const data = { name: name };
+        $.ajax("/classes/checkDup", {
+          type: "POST",
+          data: data,
+          success: function (result) {
+            if (result.status) {
+              alert("Duplicate Name");
+              $("#name").val("");
+              $("#name").focus();
+            } else {
+              $("#frm").submit();
+            }
+          },
+        });
+      } else {
+        alert("Please enter name");
+      }
+    }
+  </script>
+</html>
