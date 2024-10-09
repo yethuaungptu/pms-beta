@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <% include ../partial/head %>
+    <link rel="stylesheet" href="/stylesheets/select2.min.css">
   </head>
   <body>
     <!-- Start Homepage section-->
@@ -30,14 +31,12 @@
                       <div class="card bg-info" style="text-align: center; width: 450px; margin: auto; padding: 50px;">
                         <label for="StockName" >Stock Name: </label>
                             <select class="form-select" id="stk" name="StockName">
-                                <option>Super Coffee</option>
-                                <option>MAMA Noodle</option>
-                                <option>Linc Ball-point Pen</option>
-                                <option>Decolgen</option>
+                              <% for(var i = 0; i < items.length;i++){%>
+                                <option value="<%= items[i]._id %>"><%= items[i].name %>(<%= items[i].id %>)</option>
+                              <%}%>
                               </select>
                            </form>
-                           <div class="mb-3 mt-3" style="text-align: center; padding-top: 4px; padding-top: 8px;">
-                           <a href="stockadjcheck.html"> <button type="button"  class="btn btn-primary"  >Check</button></a>
+                           <div class="mb-3 mt-3" style="text-align: center; padding-top: 4px; padding-top: 8px;"><button type="button"  class="btn btn-primary" onclick="goAdd()">Check</button>
                          </div>
                          </div>
                         </div>
@@ -47,16 +46,16 @@
           </div>
         </main>
        </div>
-
-
-
-
-
-    </div>
-    
-          
-       
+    </div>      
   </body>
 
   <% include ../partial/script %>
+  <script src="/javascripts/select2.min.js"></script>
+  <script>
+    var stk = $("#stk");
+    stk.select2();
+    function goAdd(){
+      location.href = "/stockadjustment/add/"+$("#stk").val();
+    }
+  </script>
 </html>

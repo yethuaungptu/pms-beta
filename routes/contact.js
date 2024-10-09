@@ -2,6 +2,7 @@ var express = require("express");
 const bcrypt = require("bcryptjs");
 var router = express.Router();
 const Account = require("../models/Account");
+const Supplier = require("../models/Supplier");
 
 /* GET users listing. */
 var checkAccount = function (req, res, next) {
@@ -59,4 +60,39 @@ router.get("/deletestaff/:id", checkAccount, async function (req, res) {
   res.redirect("/contact/staffsetup");
 });
 
+router.get("/suppliersetup", checkAccount, async function (req, res) {
+  const suppliers = await Supplier.find({ status: true });
+  res.render("contact/suppliersetup", { suppliers: suppliers });
+});
+
+router.post("/suppliersetup", checkAccount, async function (req, res) {
+  const supplier = new Supplier();
+  supplier.supplierName = req.body.Sname;
+  supplier.email = req.body.email;
+  supplier.phone = req.body.phone;
+  supplier.companyName = req.body.Cname;
+  supplier.address = req.body.address;
+  const data = await supplier.save();
+  res.redirect("/contact/suppliersetup");
+});
+
+router.post("/supplierupdate", checkAccount, async function (req, res) {
+  const update = {
+    supplierName: req.body.uSname,
+    email: req.body.uemail,
+    phone: req.body.uphone,
+    companyName: req.body.uCname,
+    address: req.body.uaddress,
+    updated: Date.now(),
+  };
+  const data = await Supplier.findByIdAndUpdate(req.body.id, update);
+  res.redirect("/contact/suppliersetup");
+});
+
+router.get("/supplierdelete/:id", checkAccount, async function (req, res) {
+  const data = await Supplier.findByIdAndUpdate(req.params.id, {
+    status: false,
+  });
+  res.redirect("/contact/suppliersetup");
+});
 module.exports = router;

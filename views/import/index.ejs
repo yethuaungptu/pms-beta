@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <!--Button for sidebar toggle-->
+          <button class="btn" type="button" data-bs-theme="dark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </nav>
+        <main class="content px-3 py-2">
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1>Import</h1>
+
+              <div class="container-fluid mt-3">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="container mt-3" style="width: 400px">
+                      <form action="#">
+                        <div class="card bg-info" style="margin: auto">
+                          <div class="mb-3 mt-3" style="margin: 10px">
+                            <label for="supplierId">Supplier Name</label>
+                            <select
+                              class="form-select"
+                              id="supplierId"
+                              name="supplierId"
+                            >
+                              <% for(var i = 0; i < suppliers.length;i++){%>
+                              <option value="<%= suppliers[i]._id %>">
+                                <%= suppliers[i].supplierName %>(<%=
+                                suppliers[i].companyName %>)
+                              </option>
+                              <%}%>
+                            </select>
+                          </div>
+                          <div class="mb-3" style="margin: 10px">
+                            <label for="Adate">Arrival Date</label>
+                            <input
+                              type="date"
+                              class="form-control"
+                              id="Adate"
+                              placeholder=""
+                              name="Adate"
+                            />
+                          </div>
+                          <div id="itemList"></div>
+                          <button
+                            type="button"
+                            class="btn btn-success d-block ms-auto m-1"
+                            id="btnAddItem"
+                          >
+                            +
+                          </button>
+                          <button
+                            type="button"
+                            id="btnSubmit"
+                            class="btn btn-primary"
+                            style="margin: 10px"
+                          >
+                            Add</button
+                          ><br />
+                        </div>
+                      </form>
+                    </div>
+                    <br />
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="table-responsive">
+                      <table class="table table-bordered table-info">
+                        <thead>
+                          <tr>
+                            <th>No</th>
+                            <th>Supplier Name</th>
+
+                            <th>Arrival Date</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% for(var i = 0; i < imports.length;i++){%>
+                          <tr>
+                            <td><%= i+1 %></td>
+                            <td><%= imports[i].supplierId.supplierName %></td>
+                            <td><%= imports[i].arrivalDate %></td>
+                            <td>
+                              <a
+                                href="/import/detail/<%= imports[i]._id %>"
+                                class="btn btn-primary btn-sm"
+                                >Detail</a
+                              >
+                            </td>
+                          </tr>
+                          <%}%>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+  <% include ../partial/script %>
+  <script>
+    $("#btnAddItem").click(function () {
+      var item = `<div class="border border-success mt-3">
+                      <div class="mb-3" style="margin: 10px">
+                        <label for="class">Class</label>
+                        <select
+                          class="form-select classId"
+                          name="class"
+                          id="class"
+                        >
+                          <% for(var i = 0; i < classes.length;i++){%>
+                          <option value="<%= classes[i]._id %>">
+                            <%= classes[i].name %>
+                          </option>
+                          <%}%>
+                        </select>
+                      </div>
+                      <div class="mb-3" style="margin: 10px">
+                        <label for="category">Category</label>
+                        <select
+                          class="form-select categoryId"
+                          id="category"
+                          name="category"
+                        ></select>
+                      </div>
+                      <div class="mb-3" style="margin: 10px">
+                        <label for="itemId">Item</label>
+                        <select
+                          class="form-select"
+                          id="itemId"
+                          name="itemId"
+                        ></select>
+                      </div>
+                      <div class="mb-3" style="margin: 10px">
+                        <label for="quantity">Quantity</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="quantity"
+                          placeholder=""
+                          name="quantity"
+                          min="0"
+                        />
+                      </div>
+                      <div class="mb-3" style="margin: 10px">
+                        <label for="price">Price</label>
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="price"
+                          placeholder=""
+                          name="price"
+                          min="0"
+                        />
+                      </div>
+                      <div class="d-grid w-50 mx-auto">
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-block m-1 btn-remove"
+                        >
+                          -
+                        </button>
+                      </div>
+                    </div>`;
+      $("#itemList").append(item);
+      refrashFun();
+    });
+    $("#btnSubmit").click(function () {
+      const list = $("#itemList").children();
+      const itemList = [];
+      let totalPrice = 0;
+      for (var i = 0; i < list.length; i++) {
+        itemList.push({
+          itemId: list[i].children[2].children[1].value,
+          quantity: list[i].children[3].children[1].value,
+          amount: list[i].children[4].children[1].value,
+        });
+        totalPrice += Number(list[i].children[4].children[1].value);
+      }
+      const supplierId = $("#supplierId").val() || "";
+      const arrivalDate = $("#Adate").val();
+      if (supplierId != "" && itemList.length > 0) {
+        const data = {
+          supplierId: supplierId,
+          arrivalDate: arrivalDate,
+          itemList: JSON.stringify(itemList),
+          totalPrice: totalPrice,
+        };
+        $.ajax("/import/addItem", {
+          type: "POST",
+          data: data,
+          success: function (result) {
+            if (result.status == true) {
+              location.reload();
+            } else {
+              alert("Somethings was wrong");
+            }
+          },
+        });
+      } else {
+        alert("Please select supplier and insert aleast 1 item");
+      }
+    });
+    function refrashFun() {
+      $(".classId").change(function () {
+        changeCat($(this).val(), $(this));
+      });
+
+      function changeCat(cid, classCurrent) {
+        $("#id").val("");
+        const data = { cid: cid };
+        $.ajax("/item/getCategory", {
+          type: "POST",
+          data: data,
+          success: function (result) {
+            $(classCurrent.parents()[1].children[1].children[1]).empty();
+            for (var i = 0; i < result.categories.length; i++) {
+              $(classCurrent.parents()[1].children[1].children[1]).append(
+                `<option value=${result.categories[i]._id}>${result.categories[i].category}</option>`
+              );
+            }
+            if (result.categories.length > 0) {
+              selectCat($(classCurrent.parents()[1].children[1].children[1]));
+            }
+          },
+        });
+      }
+      function selectCat(currentCat) {
+        const data = { categoryId: $(currentCat).val() };
+        $.ajax("/import/getItem", {
+          type: "POST",
+          data: data,
+          success: function (result) {
+            $(currentCat.parents()[1].children[2].children[1]).empty();
+            for (var i = 0; i < result.items.length; i++) {
+              $(currentCat.parents()[1].children[2].children[1]).append(
+                `<option value=${result.items[i]._id}>${result.items[i].name}</option>`
+              );
+            }
+          },
+        });
+      }
+      $(".categoryId").change(function () {
+        selectCat($(this));
+      });
+    }
+  </script>
+</html>

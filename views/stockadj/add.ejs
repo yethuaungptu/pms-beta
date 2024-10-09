@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <!--Button for sidebar toggle-->
+          <button class="btn" type="button" data-bs-theme="dark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </nav>
+        <h1>Stock Adjustment</h1>
+        <div class="container mt-3">
+          <form action="/stockadjustment/add" method="post">
+            <input type="hidden" name="id" value="<%= item._id %>" />
+            <div
+              class="card bg-info"
+              style="
+                text-align: center;
+                width: 450px;
+                margin: auto;
+                padding: 50px;
+              "
+            >
+              <div class="mb-3 mt-3">
+                <label for="name">Stock Name:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  value="<%= item.name %>"
+                  name="name"
+                  readonly
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="orgquantity">Original Quantity:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="org"
+                  value="<%= item.quantity %>"
+                  name="orgquantity"
+                  readonly
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="quantity">Reduce Quantity:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="redquantity"
+                  placeholder="Enter Reduce Quantity"
+                  name="redquantity"
+                  min="0"
+                  max="<%= item.quantity %>"
+                />
+              </div>
+
+              <div class="mb-3">
+                <label for="remark">Remark:</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="remark"
+                  placeholder="Enter Remark"
+                  name="remark"
+                />
+              </div>
+
+              <div class="mb-3 mt-3">
+                <button
+                  type="submit"
+                  class="btn btn-primary"
+                  style="width: 80px"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+  <% include ../partial/script %>
+</html>
