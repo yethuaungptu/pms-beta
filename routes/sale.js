@@ -1,0 +1,60 @@
+const express = require("express");
+const router = express.Router();
+const Item = require("../models/Item");
+const Sale = require("../models/Sale");
+
+var checkAccount = function (req, res, next) {
+  if (req.session.account) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+};
+
+router.get("/", checkAccount, function (req, res) {
+  res.render("sale/index");
+});
+
+router.get("/salevoucher", checkAccount, async function (req, res) {
+  const items = await Item.find({ status: true })
+    .populate("classId", "name")
+    .populate("categoryId", "category");
+  res.render("sale/salevoucher", { items: items });
+});
+
+router.post("/add", checkAccount, async function (req, res) {
+  try {
+    const sale = new Sale();
+    console.log(JSON.parse(req.body.items));
+    sale.slipNo = req.body.sNo;
+    sale.dateStr = req.body.dateStr;
+    sale.cashierId = req.body.cashierId;
+    sale.tax = req.body.tax;
+    sale.totalAmount = req.body.totalAmount;
+    sale.grandAmount = req.body.grandAmount;
+    sale.paidAmount = req.body.paidAmount;
+    sale.refundAmount =
+      Number(req.body.paidAmount) - Number(req.body.grandAmount);
+    sale.list = JSON.parse(req.body.items);
+    const data = await sale.save();
+    for (var i = 0; i < data.list.length; i++) {
+      let update = await Item.findByIdAndUpdate(data.list[i].itemId, {
+        $inc: { quantity: -data.list[i].qty },
+      });
+    }
+    res.json({ status: true, id: data._id });
+  } catch (e) {
+    console.log(e);
+    res.json({ status: false });
+  }
+});
+
+router.get("/voucherDetail/:id", checkAccount, async function (req, res) {
+  const sale = await Sale.findById(req.params.id)
+    .populate("list.itemId", "name")
+    .populate("cashierId", "name");
+  console.log(sale);
+  res.render("sale/voucherDetail", { sale: sale });
+});
+
+module.exports = router;

@@ -220,6 +220,11 @@
         changeCat($(this).val(), $(this));
       });
 
+      $(".btn-remove").click(function () {
+        var con = confirm("Are you sure for remove");
+        if (con) $(this).parents()[1].remove();
+      });
+
       function changeCat(cid, classCurrent) {
         $("#id").val("");
         const data = { cid: cid };

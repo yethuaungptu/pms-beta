@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../partial/head %>
+    <link rel="stylesheet" href="/stylesheets/select2.min.css" />
+  </head>
+  <body>
+    <!-- Start Homepage section-->
+    <div class="wrapper">
+      <!-- Sidebar -->
+      <% include ../partial/sidebar %>
+      <div class="main">
+        <nav class="navbar navbar-expand px-3 border-bottom">
+          <!--Button for sidebar toggle-->
+          <button class="btn" type="button" data-bs-theme="dark">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </nav>
+        <main class="content px-3 py-2">
+          <div class="container-fluid">
+            <div class="mb-3">
+              <h1>Sale Voucher</h1>
+              <br />
+              <div class="col-sm-12 col-md-12 col-lg-6 mx-auto">
+                <div class="container mt-3 p-1 lg:p-5">
+                  <div class="table-responsive">
+                    <table
+                      class="table table-striped table-info center mx-auto"
+                    >
+                      <thead>
+                        <tr>
+                          <td colspan="6">
+                            <h6 class="text-center">
+                              <h4 class="text-center">
+                                PSMS Stock Management System
+                              </h4>
+                              <span class="text-center d-block">
+                                Phone:09657432876, 09664753872
+                              </span>
+                              <span class="text-center d-block">
+                                Open Daily: 8:00 AM To 9:00 PM
+                              </span>
+                              <b class="text-center d-block"> CASH SALE </b>
+                            </h6>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <td></td>
+                          <td>
+                            Slip No:
+                            <span id="sNo"><%= sale.slipNo %></span>
+                          </td>
+                          <td></td>
+                          <td colspan="2">
+                            <%= sale.dateStr %><br />CashierName: <%=
+                            sale.cashierId.name %>
+                          </td>
+                        </tr>
+
+                        <tr>
+                          <th>No</th>
+                          <th>Item</th>
+                          <th>Qty</th>
+                          <th>Price</th>
+                          <th>Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody id="tb2">
+                        <% for(var i = 0; i < sale.list.length;i++){%>
+                        <tr>
+                          <td><%= i+1 %></td>
+                          <td><%= sale.list[i].itemId.name %></td>
+                          <td><%= sale.list[i].qty %></td>
+                          <td><%= sale.list[i].price %></td>
+                          <td><%= sale.list[i].amount %></td>
+                        </tr>
+                        <%}%>
+                      </tbody>
+                      <tfoot>
+                        <tr>
+                          <td colspan="2">Tax :</td>
+                          <td></td>
+                          <td></td>
+                          <td id="tax"><%= sale.tax %></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">General Total :</td>
+                          <td></td>
+                          <td></td>
+                          <td id="gTotal"><%= sale.grandAmount %></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Paid :</td>
+                          <td></td>
+                          <td></td>
+                          <td><%= sale.paidAmount %></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Refund :</td>
+                          <td></td>
+                          <td></td>
+                          <td><%= sale.refundAmount %></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3" style="text-align: right">
+                            Thank You
+                          </td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </tfoot>
+                    </table>
+
+                    <div>
+                      <button class="btn btn-warning" type="button">
+                        Print
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+  <% include ../partial/script %>
+</html>
