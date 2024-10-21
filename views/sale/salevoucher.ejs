@@ -91,7 +91,7 @@
                 Open Voucher
               </button>
 
-              <div class="col-sm-12 col-md-12 col-lg-6 mx-auto">
+              <!-- <div class="col-sm-12 col-md-12 col-lg-6 mx-auto">
                 <div class="container mt-3 p-1 lg:p-5">
                   <div class="table-responsive">
                     <table
@@ -169,7 +169,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
             </div>
           </div>
         </main>
@@ -228,6 +228,19 @@
                 class="form-control-inline"
                 id="paidAmount"
               />
+            </div>
+            <div class="form-group">
+              <label for="" class="form-label h5">PaidBy : </label>
+              <select
+                class="form-control"
+                aria-label="Default select example"
+                id="paidBy"
+                style="display: inline"
+              >
+                <option value="Cash" selected>Cash</option>
+                <option value="Kpay">Kpay</option>
+                <option value="Wavepay">Wavepay</option>
+              </select>
             </div>
           </div>
           <div class="modal-footer">
@@ -328,8 +341,8 @@
           items.push(dataProduct);
           amount += Number(list[i].children[6].innerHTML);
         }
-        const sNo = Math.floor(Date.now() / 1000);
-        const dateStr = new Date().toISOString().split("T")[0];
+        const paidBy = $("#paidBy").val();
+        const dateStr = new Date().toLocaleString();
         const cashierId = "<%= locals.account.id %>";
         const taxId = Math.floor(amount / 20);
         const totalAmountId = amount + Math.floor(amount / 20);
@@ -337,7 +350,7 @@
         $("#taxId").html(taxId);
         $("#totalAmountId").html(totalAmountId);
         const data = {
-          sNo: sNo,
+          paidBy: paidBy,
           dateStr: dateStr,
           cashierId: cashierId,
           tax: taxId,

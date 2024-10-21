@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <% include ../partial/head %>
+    <link rel="stylesheet" href="/stylesheets/dataTables.bootstrap5.css" />
   </head>
   <body>
     <!-- Start Homepage section-->
@@ -21,71 +22,61 @@
               <h1>Sale List</h1>
 
               <div class="container-fluid mt-3">
-                <div class="row">
-                  <div class="col-lg-8">
-                    <div class="table-responsive">
-                      <table class="table table-bordered table-info">
-                        <thead>
-                          <div
-                            class="mb-3 mt-3"
-                            style="
-                              justify-content: center;
-                              padding-top: 4px;
-                              padding-top: 8px;
-                            "
+                <div
+                  class="mb-3 mt-3"
+                  style="
+                    justify-content: center;
+                    padding-top: 4px;
+                    padding-top: 8px;
+                  "
+                >
+                  <a href="/sale/salevoucher">
+                    <button
+                      type="button"
+                      class="col-lg-2 form-control bg-info"
+                      style="width: 100px"
+                    >
+                      Add new
+                    </button></a
+                  >
+                </div>
+                <div class="table-responsive">
+                  <table
+                    class="table table-bordered table-info display"
+                    id="example"
+                    style="width: 100%"
+                  >
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>Date</th>
+                        <th>Slip No</th>
+                        <th>Qunatity</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <% for(var i = 0; i < sales.length;i++){%>
+                      <tr>
+                        <td><%= i+1 %></td>
+                        <td><%= sales[i].dateStr %></td>
+                        <td><%= sales[i].slipNo %></td>
+                        <td>
+                          <%= sales[i].list.reduce((n, {qty}) => n + qty, 0) %>
+                        </td>
+                        <td><%= sales[i].grandAmount %></td>
+                        <td>
+                          <a
+                            href="/sale/voucherDetail/<%= sales[i]._id%>"
+                            class="btn btn-primary"
+                            >Detail</a
                           >
-                            <a href="/sale/salevoucher">
-                              <button
-                                type="button"
-                                class="col-lg-2 form-control bg-info"
-                                style="width: 100px"
-                              >
-                                Add new
-                              </button></a
-                            >
-                          </div>
-                          <tr>
-                            <th>No</th>
-                            <th>Date</th>
-                            <th>Customers</th>
-                            <th>Qunatity</th>
-                            <th>Amount</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td>1</td>
-                            <td>15/7/2024</td>
-                            <td>C-001</td>
-                            <td>5</td>
-                            <td>10000</td>
-                          </tr>
-                          <tr>
-                            <td>2</td>
-                            <td>15/7/2024</td>
-                            <td>C-002</td>
-                            <td>3</td>
-                            <td>4200</td>
-                          </tr>
-
-                          <tr>
-                            <td>3</td>
-                            <td>15/7/2024</td>
-                            <td>C-003</td>
-                            <td>7</td>
-                            <td>5500</td>
-                          </tr>
-                          <tr>
-                            <td>4</td>
-                            <td>15/7/2024</td>
-                            <td>C-004</td>
-                            <td>4</td>
-                            <td>4000</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                        </td>
+                      </tr>
+                      <%}%>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -95,4 +86,9 @@
     </div>
   </body>
   <% include ../partial/script %>
+  <script src="/javascripts/dataTables.js"></script>
+  <script src="/javascripts/dataTables.bootstrap5.js"></script>
+  <script>
+    new DataTable("#example");
+  </script>
 </html>

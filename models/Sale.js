@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+var moment = require("moment-timezone");
 
 const SaleSchema = new Schema({
   slipNo: {
@@ -7,6 +8,10 @@ const SaleSchema = new Schema({
     required: true,
   },
   dateStr: {
+    type: String,
+    required: true,
+  },
+  paidBy: {
     type: String,
     required: true,
   },
@@ -56,11 +61,11 @@ const SaleSchema = new Schema({
   ],
   created: {
     type: Date,
-    default: Date.now(),
+    default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
   },
   updated: {
     type: Date,
-    default: Date.now(),
+    default: moment.utc(Date.now()).tz("Asia/Yangon").format(),
   },
 });
 

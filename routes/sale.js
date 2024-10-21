@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Item = require("../models/Item");
 const Sale = require("../models/Sale");
+var moment = require("moment-timezone");
 
 var checkAccount = function (req, res, next) {
   if (req.session.account) {
@@ -11,8 +12,9 @@ var checkAccount = function (req, res, next) {
   }
 };
 
-router.get("/", checkAccount, function (req, res) {
-  res.render("sale/index");
+router.get("/", checkAccount, async function (req, res) {
+  const sales = await Sale.find({});
+  res.render("sale/index", { sales: sales });
 });
 
 router.get("/salevoucher", checkAccount, async function (req, res) {
@@ -25,8 +27,15 @@ router.get("/salevoucher", checkAccount, async function (req, res) {
 router.post("/add", checkAccount, async function (req, res) {
   try {
     const sale = new Sale();
+    var now = new Date();
+    const starttz = moment.utc(now).tz("Asia/Yangon").startOf("day").format();
+    const endtz = moment.utc(now).tz("Asia/Yangon").endOf("day").format();
+    const saleCount = await Sale.countDocuments({
+      created: { $gte: starttz, $lte: endtz },
+    });
     console.log(JSON.parse(req.body.items));
-    sale.slipNo = req.body.sNo;
+    sale.slipNo = saleCount + 1;
+    sale.paidBy = req.body.paidBy;
     sale.dateStr = req.body.dateStr;
     sale.cashierId = req.body.cashierId;
     sale.tax = req.body.tax;

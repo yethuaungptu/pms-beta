@@ -57,7 +57,6 @@
                             sale.cashierId.name %>
                           </td>
                         </tr>
-
                         <tr>
                           <th>No</th>
                           <th>Item</th>
@@ -67,7 +66,8 @@
                         </tr>
                       </thead>
                       <tbody id="tb2">
-                        <% for(var i = 0; i < sale.list.length;i++){%>
+                        <% let totalQty = 0; for(var i = 0; i <
+                        sale.list.length;i++){ totalQty += sale.list[i].qty%>
                         <tr>
                           <td><%= i+1 %></td>
                           <td><%= sale.list[i].itemId.name %></td>
@@ -79,16 +79,22 @@
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colspan="2">Tax :</td>
+                          <td colspan="2">Commerical Tax :</td>
                           <td></td>
                           <td></td>
                           <td id="tax"><%= sale.tax %></td>
                         </tr>
                         <tr>
                           <td colspan="2">General Total :</td>
-                          <td></td>
+                          <td><%= totalQty %></td>
                           <td></td>
                           <td id="gTotal"><%= sale.grandAmount %></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2">Paid By :</td>
+                          <td></td>
+                          <td></td>
+                          <td><%= sale.paidBy %></td>
                         </tr>
                         <tr>
                           <td colspan="2">Paid :</td>
@@ -103,11 +109,9 @@
                           <td><%= sale.refundAmount %></td>
                         </tr>
                         <tr>
-                          <td colspan="3" style="text-align: right">
+                          <td colspan="5" style="text-align: center">
                             Thank You
                           </td>
-                          <td></td>
-                          <td></td>
                         </tr>
                       </tfoot>
                     </table>
