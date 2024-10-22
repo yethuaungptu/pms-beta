@@ -14,6 +14,7 @@ var itemRouter = require("./routes/item");
 var stockAdjRouter = require("./routes/stockadj");
 var importRouter = require("./routes/import");
 var saleRouter = require("./routes/sale");
+var reportRouter = require("./routes/report");
 var app = express();
 
 // view engine setup
@@ -51,6 +52,7 @@ app.use("/item", itemRouter);
 app.use("/stockadjustment", stockAdjRouter);
 app.use("/import", importRouter);
 app.use("/sale", saleRouter);
+app.use("/report", reportRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

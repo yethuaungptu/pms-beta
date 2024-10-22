@@ -31,7 +31,10 @@
                 <div class="col-lg-4 col-md-3 col-sm-6 mt-auto mx-auto row p-1">
                   <select id="stk" class="form-select p-2" name="StockName">
                     <% for(var i = 0; i < items.length;i++){%>
-                    <option value="<%= items[i]._id %>">
+                    <option
+                      data-qty="<%= items[i].quantity %>"
+                      value="<%= items[i]._id %>"
+                    >
                       <%= items[i].name %>(<%= items[i].id %>)
                     </option>
                     <%}%>
@@ -259,11 +262,15 @@
     stk.select2();
     const list = JSON.parse($("#list").val());
     $("#btnInsert").click(function () {
-      const data = list.filter((item) => {
-        return item._id.toString() == $("#stk").val().toString();
-      });
+      console.log($("#stk").find(":selected").data("qty"));
+      if ($("#qty").val() > $("#stk").find(":selected").data("qty")) {
+        alert("Your order quanties are more than remaining quanties");
+      } else {
+        const data = list.filter((item) => {
+          return item._id.toString() == $("#stk").val().toString();
+        });
 
-      const html = `<tr>
+        const html = `<tr>
                         <td>${data[0].name}</td>
                         <td data-id='${data[0]._id}'>${data[0].id}</td>
                         <td>${data[0].classId.name}</td>
@@ -282,8 +289,9 @@
                           </ul>
                         </td>
                       </tr>`;
-      $("#tb1").append(html);
-      refrashFun();
+        $("#tb1").append(html);
+        refrashFun();
+      }
     });
     $("#btnOpen").click(function () {
       if ($("#tb1").children().length == 0) {
