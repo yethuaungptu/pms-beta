@@ -67,7 +67,7 @@
                 </thead>
                 <tfoot>
                   <tr>
-                    <th colspan="3">Total</th>
+                    <th colspan="3" class="text-center">Total</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -88,7 +88,13 @@
     const data = new DataTable("#example", {
       ajax: "/report/getSaleList",
       columns: [
-        { data: "slipNo" },
+        {
+          data: "id",
+          render: function (data, type, row, meta) {
+            console.log(meta);
+            return meta.row + 1;
+          },
+        },
         { data: "dateStr" },
         { data: "slipNo" },
         { data: "grandAmount" },
@@ -126,9 +132,9 @@
           redraw = false;
         }
       },
-      rowCallback: function (row, data) {
-        $("td:eq(0)", row).html(data[0] + "/" + $("tfoot th:eq(3)").text());
-      },
+      // rowCallback: function (row, data) {
+      //   $("td:eq(0)", row).html(data[0] + "/" + $("tfoot th:eq(3)").text());
+      // },
     });
 
     $("#checkBtn").click(function () {

@@ -332,7 +332,17 @@
       });
     }
     $("#btnPaid").click(function () {
-      if ($("#paidAmount").val() < $("#totalAmountId").html()) {
+      if (
+        Number($("#paidAmount").val()) < Number($("#totalAmountId").html()) ||
+        !$("#paidAmount").val() ||
+        !$("#totalAmountId").html()
+      ) {
+        console.log(
+          $("#totalAmountId").html(),
+          $("#paidAmount").val(),
+          !$("#paidAmount").val(),
+          !$("#totalAmountId").html()
+        );
         alert("Please enter paid amount more than total amount");
       } else {
         $("#paidModal").modal("hide");

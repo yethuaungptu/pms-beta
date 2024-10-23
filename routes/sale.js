@@ -13,7 +13,10 @@ var checkAccount = function (req, res, next) {
 };
 
 router.get("/", checkAccount, async function (req, res) {
-  const sales = await Sale.find({});
+  var now = new Date();
+  const starttz = moment.utc(now).tz("Asia/Yangon").startOf("day").format();
+  const endtz = moment.utc(now).tz("Asia/Yangon").endOf("day").format();
+  const sales = await Sale.find({ created: { $gte: starttz, $lte: endtz } });
   res.render("sale/index", { sales: sales });
 });
 
