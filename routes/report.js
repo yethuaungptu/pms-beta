@@ -40,59 +40,18 @@ router.get("/daily", checkAccount, async function (req, res) {
   var now = new Date();
   const starttz = moment.utc(now).tz("Asia/Yangon").startOf("day").format();
   const endtz = moment.utc(now).tz("Asia/Yangon").endOf("day").format();
-  const result = await Sale.find({ created: { $gte: starttz, $lte: endtz } });
+  const resultInfo = await Sale.find({
+    created: { $gte: starttz, $lte: endtz },
+  });
 
   let qtyCount = 0;
   let saleAmount = 0;
-  result.map((item) => {
+  resultInfo.map((item) => {
     saleAmount += item.grandAmount;
     item.list.map((innerItem) => {
       qtyCount += innerItem.qty;
     });
   });
-  console.log(result, qtyCount, saleAmount);
-  res.render("report/daily", { qtyCount: qtyCount, saleAmount: saleAmount });
-});
-
-router.get("/weekly", checkAccount, async function (req, res) {
-  var now = new Date();
-  const starttz = moment.utc(now).tz("Asia/Yangon").startOf("week").format();
-  const endtz = moment.utc(now).tz("Asia/Yangon").endOf("week").format();
-  const result = await Sale.find({ created: { $gte: starttz, $lte: endtz } });
-
-  let qtyCount = 0;
-  let saleAmount = 0;
-  result.map((item) => {
-    saleAmount += item.grandAmount;
-    item.list.map((innerItem) => {
-      qtyCount += innerItem.qty;
-    });
-  });
-  console.log(result, qtyCount, saleAmount);
-  res.render("report/weekly", { qtyCount: qtyCount, saleAmount: saleAmount });
-});
-
-router.get("/monthly", checkAccount, async function (req, res) {
-  const result = await Sale.aggregate([
-    {
-      $group: {
-        _id: {
-          month: { $month: "$created" },
-          year: { $year: "$created" },
-        },
-        grandAmount: { $sum: { $toInt: "$grandAmount" } },
-      },
-    },
-  ]);
-  console.log(result);
-  res.render("report/monthly", { result: result });
-});
-
-router.get("/todaySaleItem", checkAccount, async function (req, res) {
-  var now = new Date();
-  const starttz = moment.utc(now).startOf("day").format();
-  const endtz = moment.utc(now).endOf("day").format();
-  console.log(starttz, endtz);
   const result = await Sale.aggregate([
     {
       $match: { created: { $gte: new Date(starttz), $lte: new Date(endtz) } },
@@ -116,7 +75,111 @@ router.get("/todaySaleItem", checkAccount, async function (req, res) {
     const itemInfo = await Item.findById(result[i].itemId).select("name");
     info.push({ name: itemInfo.name, quantity: result[i].quantity });
   }
-  res.render("report/todaySaleItem", { info: info });
+  console.log(result, qtyCount, saleAmount);
+  res.render("report/daily", {
+    qtyCount: qtyCount,
+    saleAmount: saleAmount,
+    info: info,
+  });
+});
+
+router.get("/weekly", checkAccount, async function (req, res) {
+  var now = new Date();
+  const starttz = moment.utc(now).tz("Asia/Yangon").startOf("week").format();
+  const endtz = moment.utc(now).tz("Asia/Yangon").endOf("week").format();
+
+  const result = await Sale.aggregate([
+    {
+      $match: { created: { $gte: new Date(starttz), $lte: new Date(endtz) } },
+    },
+    {
+      $group: {
+        _id: { $dateToString: { format: "%Y-%m-%d", date: "$created" } },
+        total: { $sum: "$grandAmount" },
+      },
+    },
+    {
+      $addFields: {
+        date: "$_id",
+        _id: "$$REMOVE",
+      },
+    },
+  ]);
+  console.log(result);
+  res.render("report/weekly", { result: result });
+});
+
+router.get("/monthly", checkAccount, async function (req, res) {
+  var now = new Date();
+
+  const starttz = moment.utc(now).tz("Asia/Yangon").startOf("month").format();
+  const endtz = moment.utc(now).tz("Asia/Yangon").endOf("month").format();
+  console.log(starttz, endtz);
+  const result = await Sale.aggregate([
+    {
+      $match: { created: { $gte: new Date(starttz), $lte: new Date(endtz) } },
+    },
+    {
+      $group: {
+        _id: {
+          year: { $year: "$created" },
+          week: { $isoWeek: "$created" },
+        },
+        totalGrandAmount: { $sum: "$grandAmount" },
+        startOfWeek: { $min: "$created" },
+        endOfWeek: { $max: "$created" },
+      },
+    },
+    {
+      $project: {
+        week: {
+          $concat: [
+            { $toString: "$_id.year" },
+            "-W",
+            { $toString: "$_id.week" },
+          ],
+        },
+        totalGrandAmount: 1,
+        startOfWeek: {
+          $dateFromString: {
+            dateString: {
+              $dateToString: { format: "%Y-%m-%d", date: "$startOfWeek" },
+            },
+          },
+        },
+        endOfWeek: {
+          $dateFromString: {
+            dateString: {
+              $dateToString: { format: "%Y-%m-%d", date: "$endOfWeek" },
+            },
+          },
+        },
+      },
+    },
+    {
+      $addFields: {
+        startOfWeek: {
+          $dateSubtract: {
+            startDate: "$startOfWeek",
+            unit: "day",
+            amount: { $dayOfWeek: "$startOfWeek" },
+          },
+        },
+        endOfWeek: {
+          $dateAdd: { startDate: "$startOfWeek", unit: "day", amount: 6 },
+        },
+      },
+    },
+    {
+      $sort: {
+        "_id.year": 1,
+        "_id.week": 1,
+      },
+    },
+  ]);
+
+  console.log(result);
+  res.render("report/monthly", { result: result });
 });
 
 module.exports = router;

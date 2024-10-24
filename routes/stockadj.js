@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Item = require("../models/Item");
 const StockAdj = require("../models/StockAdj");
+const { findByIdAndDelete } = require("../models/Sale");
 
 var checkAccount = function (req, res, next) {
   if (req.session.account) {
@@ -13,7 +14,8 @@ var checkAccount = function (req, res, next) {
 
 router.get("/", checkAccount, async function (req, res) {
   const items = await Item.find({ status: true });
-  res.render("stockadj/index", { items: items });
+  const stockadjs = await StockAdj.find({}).populate("itemId", "name id");
+  res.render("stockadj/index", { items: items, stockadjs: stockadjs });
 });
 
 router.get("/add/:id", checkAccount, async function (req, res) {
@@ -37,5 +39,18 @@ router.post("/add", checkAccount, async function (req, res) {
   stockadj.createdBy = req.session.account.id;
   const result = await stockadj.save();
   res.redirect("/item/list");
+});
+
+router.post("/delete", checkAccount, async function (req, res) {
+  try {
+    const data = await Item.findByIdAndUpdate(req.body.itemId, {
+      $inc: { quantity: req.body.qty },
+    });
+    const deleteInfo = await StockAdj.findByIdAndDelete(req.body.id);
+    res.json({ status: true });
+  } catch (e) {
+    console.log(e);
+    res.json({ status: false });
+  }
 });
 module.exports = router;

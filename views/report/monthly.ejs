@@ -22,9 +22,17 @@
               <h1>Monthly Report</h1>
             </div>
             <div class="row my-5">
+              <input
+                type="hidden"
+                id="dataInfo"
+                value="<%= JSON.stringify(result) %>"
+              />
               <div class="col-lg-2 col-md-12 col-sm-12"></div>
               <div class="col-lg-8 col-md-12 col-sm-12">
-                <table class="table" id="example">
+                <div class="chart-container bg-white">
+                  <canvas id="myChart"></canvas>
+                </div>
+                <!-- <table class="table" id="example">
                   <thead>
                     <th>No</th>
                     <th>Date</th>
@@ -41,7 +49,7 @@
                     </tr>
                     <%}%>
                   </tbody>
-                </table>
+                </table> -->
               </div>
             </div>
           </div>
@@ -50,9 +58,65 @@
     </div>
   </body>
   <% include ../partial/script %>
-  <script src="/javascripts/dataTables.js"></script>
+  <!-- <script src="/javascripts/dataTables.js"></script>
   <script src="/javascripts/dataTables.bootstrap5.js"></script>
   <script>
     new DataTable("#example");
+  </script> -->
+  <script src="/javascripts/chart.js"></script>
+  <script src="/javascripts/moment.min.js"></script>
+  <script>
+    const dataInfo = JSON.parse($("#dataInfo").val());
+    console.log(dataInfo);
+    const data = [];
+    const labels = [];
+    dataInfo.map((item) => {
+      data.push(item.totalGrandAmount);
+      labels.push(
+        moment(item.startOfWeek).format("MM-DD-YYYY") +
+          " To " +
+          moment(item.endOfWeek).subtract(1, "days").format("MM-DD-YYYY")
+      );
+    });
+    const ctx = document.getElementById("myChart");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Weekly Sale",
+            data: data,
+            borderWidth: 1,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 205, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(201, 203, 207, 0.2)",
+            ],
+            borderColor: [
+              "rgb(255, 99, 132)",
+              "rgb(255, 159, 64)",
+              "rgb(255, 205, 86)",
+              "rgb(75, 192, 192)",
+              "rgb(54, 162, 235)",
+              "rgb(153, 102, 255)",
+              "rgb(201, 203, 207)",
+            ],
+          },
+        ],
+      },
+
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
   </script>
 </html>

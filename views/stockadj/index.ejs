@@ -3,6 +3,7 @@
   <head>
     <% include ../partial/head %>
     <link rel="stylesheet" href="/stylesheets/select2.min.css">
+    <link rel="stylesheet" href="/stylesheets/dataTables.bootstrap5.css" />
   </head>
   <body>
     <!-- Start Homepage section-->
@@ -43,6 +44,35 @@
                     </div>
 
             </div>
+            <div class="row">
+              <div class="col-lg-2 col-md-12 col-sm-12"></div>
+              <div class="col-lg-8 col-md-12 col-sm-12">
+                <table class="table" id="example">
+                  <thead>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th>Reduce Quantity</th>
+                    <th>Remark</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                  </thead>
+                  <tbody>
+                    <% for(var i = 0; i < stockadjs.length;i++){%>
+                      <tr>
+                        <td><%= i+ 1 %></td>
+                        <td><%= stockadjs[i].itemId.name %></td>
+                        <td><%= stockadjs[i].itemId.id %></td>
+                        <td><%= stockadjs[i].reduceQty %></td>
+                        <td><%= stockadjs[i].remark %></td>
+                        <td><%= new Date(stockadjs[i].created).toDateString() %></td>
+                        <td><button class="btn btn-danger" onclick="delFun('<%= stockadjs[i]._id %>','<%= stockadjs[i].itemId._id %>','<%= stockadjs[i].reduceQty %>')">Delete</button></td>
+                      </tr>
+                    <%}%>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </main>
        </div>
@@ -51,11 +81,33 @@
 
   <% include ../partial/script %>
   <script src="/javascripts/select2.min.js"></script>
+  <script src="/javascripts/dataTables.js"></script>
+  <script src="/javascripts/dataTables.bootstrap5.js"></script>
+
   <script>
+    new DataTable("#example");
     var stk = $("#stk");
     stk.select2();
     function goAdd(){
       location.href = "/stockadjustment/add/"+$("#stk").val();
+    }
+    function delFun(id,itemId,qty){
+      var opt = confirm("Are you sure for delete?");
+      if(opt){
+        const data = {id:id,qty:qty,itemId:itemId};
+      $.ajax("/stockadjustment/delete", {
+          type: "POST",
+          data: data,
+          success: function (result) {
+            if(result.status){
+              location.reload();
+            }else{
+              alert("Somethings was wrong");
+            }
+          },
+        });
+      }
+      
     }
   </script>
 </html>

@@ -21,34 +21,18 @@
               <h1>Weekly Report</h1>
             </div>
             <div class="row">
-              <div class="col-lg-3 col-md-12 col-sm-12"></div>
-              <div class="col-lg-6 col-md-12 col-sm-12">
-                <div class="card w-full">
-                  <div class="card-header h3 text-center">Weekly Report</div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-sm-6 mb-3 mb-sm-0">
-                        <div class="card">
-                          <div class="card-body">
-                            <h4 class="card-title text-center">Total Item</h4>
-                            <h5 class="card-text text-center">
-                              <%= qtyCount %>
-                            </h5>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-6">
-                        <div class="card">
-                          <div class="card-body">
-                            <h4 class="card-title text-center">Sale Amount</h4>
-                            <h5 class="card-text text-center">
-                              <%= saleAmount %>
-                            </h5>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <input
+                type="hidden"
+                id="dataInfo"
+                value="<%= JSON.stringify(result) %>"
+              />
+              <div class="col-lg-2 col-md-12 col-sm-12"></div>
+              <div class="col-lg-8 col-md-12 col-sm-12 bg-white">
+                <div
+                  class="chart-container"
+                  style="position: relative; height: 40vh; width: 80vw"
+                >
+                  <canvas id="myChart"></canvas>
                 </div>
               </div>
             </div>
@@ -58,4 +42,55 @@
     </div>
   </body>
   <% include ../partial/script %>
+  <script src="/javascripts/chart.js"></script>
+  <script>
+    const dataInfo = JSON.parse($("#dataInfo").val());
+    console.log(dataInfo);
+    const data = [];
+    const labels = [];
+    dataInfo.map((item) => {
+      data.push(item.total);
+      labels.push(item.date);
+    });
+    const ctx = document.getElementById("myChart");
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Weekly Sale",
+            data: data,
+            borderWidth: 1,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+              "rgba(255, 205, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(201, 203, 207, 0.2)",
+            ],
+            borderColor: [
+              "rgb(255, 99, 132)",
+              "rgb(255, 159, 64)",
+              "rgb(255, 205, 86)",
+              "rgb(75, 192, 192)",
+              "rgb(54, 162, 235)",
+              "rgb(153, 102, 255)",
+              "rgb(201, 203, 207)",
+            ],
+          },
+        ],
+      },
+
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+  </script>
 </html>

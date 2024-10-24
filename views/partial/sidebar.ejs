@@ -1,15 +1,22 @@
 <aside id="sidebar">
   <div class="h-100">
-    <div class="sidebar-logo " >
-      <img src="/images/icon.jpg" style="width:50px; border-radius: 50px; margin-top: 10px; margin-left: 15px;"/>
-      <span style="color:white;">PMS stock management </span><span style="margin-left: 60px; color:white">system</span> 
+    <div class="sidebar-logo">
+      <img
+        src="/images/icon.jpg"
+        style="
+          width: 50px;
+          border-radius: 50px;
+          margin-top: 10px;
+          margin-left: 15px;
+        "
+      />
+      <span style="color: white">PMS stock management </span
+      ><span style="margin-left: 60px; color: white">system</span>
     </div>
     <!--Side bar nav-->
 
     <ul class="sidebar-nav">
-      <li class="sidebar-header">
-        
-      </li>
+      <li class="sidebar-header"></li>
 
       <li class="sidebar-item">
         <a href="/" class="sidebar-link">
@@ -19,73 +26,81 @@
       </li>
 
       <li class="sidebar-item">
-        <a href="index.html" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#inventry"
-        aria-expanded="false" aria-controls="inventry">
-        <i class="fa-solid fa-warehouse pe-2"></i>
-      Inventory
-      </a>
+        <a
+          href="index.html"
+          class="sidebar-link collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#inventry"
+          aria-expanded="false"
+          aria-controls="inventry"
+        >
+          <i class="fa-solid fa-warehouse pe-2"></i>
+          Inventory
+        </a>
 
-      <ul id="inventry" class="sidebar-dropdown  list-unstyled collapse"  
-      data-bs-parent="#sidebar">
+        <ul
+          id="inventry"
+          class="sidebar-dropdown list-unstyled collapse"
+          data-bs-parent="#sidebar"
+        >
+          <li class="sidebar-item">
+            <a href="/item/list" class="sidebar-link">View Items</a>
+          </li>
 
-      <li class="sidebar-item">
-        <a href="/item/list" class="sidebar-link">View Items</a>
+          <li class="sidebar-item">
+            <a href="/item/add" class="sidebar-link">Add Items</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="/classes" class="sidebar-link">Class</a>
+          </li>
 
+          <li class="sidebar-item">
+            <a href="/category" class="sidebar-link">Category</a>
+          </li>
+          <% if(locals.account.role == 'admin'){%>
+          <li class="sidebar-item">
+            <a href="/stockadjustment" class="sidebar-link">Stock Adjustment</a>
+          </li>
+          <%}%>
+        </ul>
       </li>
 
-      <li class="sidebar-item">
-        <a href="/item/add" class="sidebar-link">Add Items</a>
-
-      </li>
-
-
-      <li class="sidebar-item">
-        <a href="/classes" class="sidebar-link">Class</a>
-
-      </li>
-
-      <li class="sidebar-item">
-        <a href="/category" class="sidebar-link">Category</a>
-
-      </li>
       <% if(locals.account.role == 'admin'){%>
       <li class="sidebar-item">
-        <a href="/stockadjustment" class="sidebar-link">Stock Adjustment</a>
-      </li>
-    <%}%>
-    </ul>
-      </li>
+        <a
+          href="#"
+          class="sidebar-link collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#content"
+          aria-expanded="false"
+          aria-controls="content"
+        >
+          <i class="fa-regular fa-rectangle-list pe-2"></i>
+          Contact
+        </a>
 
+        <ul
+          id="content"
+          class="sidebar-dropdown list-unstyled collapse"
+          data-bs-parent="#sidebar"
+        >
+          <li class="sidebar-item">
+            <a href="/contact/suppliersetup" class="sidebar-link">
+              Supplier Setup</a
+            >
+          </li>
 
-      <% if(locals.account.role == 'admin'){%>
-      <li class="sidebar-item">
-        <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#content"
-        aria-expanded="false" aria-controls="content">
-        <i class="fa-regular fa-rectangle-list pe-2"></i>
-     Contact
-      </a>
-
-      <ul id="content" class="sidebar-dropdown  list-unstyled collapse"  
-      data-bs-parent="#sidebar">
-
-      <li class="sidebar-item">
-        <a href="/contact/suppliersetup" class="sidebar-link"> Supplier Setup</a>
-
-      </li>
-
-      <li class="sidebar-item">
-        <a href="/contact/staffsetup" class="sidebar-link"> Staff Setup</a>
-
-      </li>
-
-    </ul>
+          <li class="sidebar-item">
+            <a href="/contact/staffsetup" class="sidebar-link"> Staff Setup</a>
+          </li>
+        </ul>
       </li>
       <%}%>
 
       <li class="sidebar-item">
         <a href="/import" class="sidebar-link">
           <i class="fa-solid fa-file-import pe-2"></i>
-        Import
+          Import
         </a>
       </li>
 
@@ -96,48 +111,40 @@
         </a>
       </li>
 
+      <li class="sidebar-item">
+        <a
+          href="#"
+          class="sidebar-link collapsed"
+          data-bs-toggle="collapse"
+          data-bs-target="#report"
+          aria-expanded="false"
+          aria-controls="report"
+        >
+          <i class="fa-regular fa-clipboard pe-2"></i>
+          Report
+        </a>
 
-
-      <li class="sidebar-item">
-        <a href="#" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#report"
-        aria-expanded="false" aria-controls="report">
-        <i class="fa-regular fa-clipboard pe-2"></i>
-    Report
-      </a>
-
-      <ul id="report" class="sidebar-dropdown  list-unstyled collapse"  
-      data-bs-parent="#sidebar">
-      <li class="sidebar-item">
-        <a href="/report" class="sidebar-link">Sale Report</a>
+        <ul
+          id="report"
+          class="sidebar-dropdown list-unstyled collapse"
+          data-bs-parent="#sidebar"
+        >
+          <li class="sidebar-item">
+            <a href="/report" class="sidebar-link">Sale Report</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="/report/daily" class="sidebar-link">Daily Report</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="/report/weekly" class="sidebar-link">Weekly Report</a>
+          </li>
+          <li class="sidebar-item">
+            <a href="/report/monthly" class="sidebar-link">Monthly Report</a>
+          </li>
+        </ul>
       </li>
-      <li class="sidebar-item">
-        <a href="/report/daily" class="sidebar-link">Daily Report</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="/report/weekly" class="sidebar-link">Weekly Report</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="/report/monthly" class="sidebar-link">Monthly Report</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="/report/todaySaleItem" class="sidebar-link">Today Sale Item Report</a>
-      </li>
-      <li class="sidebar-item">
-        <a href="stockadjreport.html" class="sidebar-link">Stock Adjustment</a>
-      </li>
-
-      <li class="sidebar-item">
-        <a href="itemlistreport.html" class="sidebar-link">Items List</a>
-
-      </li>
-
-
-      
-    </ul>
-      </li>
-      <li class="sidebar-header"> 
-      </li>
-      <li class="sidebar-item">
+      <li class="sidebar-header"></li>
+      <!-- <li class="sidebar-item">
         <a href="profi.html" class="sidebar-link collapsed" data-bs-toggle="collapse" data-bs-target="#profi"
         aria-expanded="false" aria-controls="profi">
         <i class="fa-solid fa-user pe-2"></i>
@@ -159,10 +166,10 @@
         </li>
       <%}%>
       </li>
-      </li>
+      </li> -->
     </ul>
     <li class="sidebar-item">
-      <a href="aboutus.html" class="sidebar-link">
+      <a href="/aboutus" class="sidebar-link">
         <i class="fa-solid fa-users pe-2"></i>
         About Us
       </a>
