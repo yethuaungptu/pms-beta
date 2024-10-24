@@ -182,4 +182,32 @@ router.get("/monthly", checkAccount, async function (req, res) {
   res.render("report/monthly", { result: result });
 });
 
+router.get("/dailySummary", checkAccount, async function (req, res) {
+  var now = new Date();
+  const starttz = moment.utc(now).tz("Asia/Yangon").startOf("month").format();
+  const endtz = moment.utc(now).tz("Asia/Yangon").endOf("month").format();
+  console.log(starttz, endtz);
+  const sales = await Sale.aggregate([
+    { $unwind: "$list" },
+    {
+      $group: {
+        _id: {
+          date: {
+            $dateToString: {
+              date: "$created",
+              format: "%m-%d-%Y",
+              timezone: "Asia/Yangon",
+            },
+          },
+        },
+        quantity: { $sum: "$list.qty" },
+        amount: { $sum: "$grandAmount" },
+      },
+    },
+    { $sort: { "_id.date": -1 } },
+  ]);
+  console.log(sales);
+  res.render("report/dailySummary", { sales: sales });
+});
+
 module.exports = router;
